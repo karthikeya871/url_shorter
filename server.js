@@ -29,8 +29,8 @@ app.post('/api/shorten', async (req, res) => {
     return res.status(400).json({ error: 'Please provide a valid URL' });
   }
 
-  // 🌟 DYNAMIC BASE URL: Switches between Render and Localhost automatically!
-  const baseUrl = process.env.NODE_ENV === 'production'
+  // 🌟 FOOLPROOF BASE URL: Checks if running on Render backend, otherwise uses localhost
+  const baseUrl = process.env.IS_RENDER === 'true' || process.env.NODE_ENV === 'production'
     ? 'https://url-shortener-backend-grlx.onrender.com'
     : 'http://localhost:5000';
 
@@ -78,7 +78,8 @@ app.get('/:code', async (req, res) => {
 // ==========================================
 // 4. START SERVER (Always at the very bottom)
 // ==========================================
-const PORT = 5000;
+// 🌟 Render dynamic port binding fallback
+const PORT = process.env.PORT || 5000; 
 app.listen(PORT, () => {
-    console.log(`Server is successfully running on http://localhost:${PORT}`);
+    console.log(`Server is successfully running on port ${PORT}`);
 });
