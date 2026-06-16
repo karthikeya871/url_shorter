@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
 });
 
 // --- API Endpoint: Shorten a URL ---
+// --- API Endpoint: Shorten a URL ---
 app.post('/api/shorten', async (req, res) => {
   const { longUrl } = req.body;
 
@@ -29,10 +30,8 @@ app.post('/api/shorten', async (req, res) => {
     return res.status(400).json({ error: 'Please provide a valid URL' });
   }
 
-  // 🌟 FOOLPROOF BASE URL: Checks if running on Render backend, otherwise uses localhost
-  const baseUrl = process.env.IS_RENDER === 'true' || process.env.NODE_ENV === 'production'
-    ? 'https://url-shortener-backend-grlx.onrender.com'
-    : 'http://localhost:5000';
+  // 🌟 HARDCODED FIX: Absolutely forces the live Render link 
+  const baseUrl = 'https://url-shortener-backend-grlx.onrender.com';
 
   try {
     let url = await Url.findOne({ longUrl });
@@ -52,7 +51,6 @@ app.post('/api/shorten', async (req, res) => {
     res.status(500).json({ error: 'Server database error' });
   }
 });
-
 // --- Redirect Route: Accessing the short URL ---
 app.get('/:code', async (req, res) => {
   try {
